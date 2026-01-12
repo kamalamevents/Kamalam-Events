@@ -1052,36 +1052,37 @@
 
     <!-- Contact Section -->
     <section class="contact" id="contact">
-        <div class="container">
-            <div class="section-header animate-on-scroll">
-                <p class="section-label">Get In Touch</p>
-                <h2 class="section-title">Let's Plan Something Meaningful</h2>
-                <p class="section-description">Share your vision with us, and we'll help bring it to life.</p>
-            </div>
-            <form class="contact-form animate-on-scroll" onsubmit="handleSubmit(event)">
-                <div class="form-group">
-                    <label for="name">Your Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
-                </div>
-                <div class="form-group">
-                    <label for="eventType">Event Type (Optional)</label>
-                    <select id="eventType" name="eventType">
-                        <option value="">Select event type</option>
-                        <option value="wedding">Wedding</option>
-                        <option value="corporate">Corporate Event</option>
-                        <option value="college">College/Youth Event</option>
-                        <option value="personal">Personal Celebration</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-btn">Start Planning →</button>
-            </form>
+    <div class="container">
+        <div class="section-header animate-on-scroll">
+            <p class="section-label">Get In Touch</p>
+            <h2 class="section-title">Let's Plan Something Meaningful</h2>
+            <p class="section-description">Share your vision with us, and we'll help bring it to life.</p>
         </div>
-    </section>
+        <form class="contact-form animate-on-scroll" action="https://api.web3forms.com/submit" method="POST" onsubmit="handleSubmit(event)">
+            <input type="hidden" name="access_key" value="e7da5118-b1b6-4ce2-8e46-701add4aa555">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+            </div>
+            <div class="form-group">
+                <label for="eventType">Event Type (Optional)</label>
+                <select id="eventType" name="eventType">
+                    <option value="">Select event type</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="corporate">Corporate Event</option>
+                    <option value="college">College/Youth Event</option>
+                    <option value="personal">Personal Celebration</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <button type="submit" class="submit-btn">Start Planning →</button>
+        </form>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer>
@@ -1245,12 +1246,30 @@
         });
 
         // Form submission
-        function handleSubmit(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            alert(`Thank you, ${name}! We'll be in touch soon to help plan your event.`);
-            e.target.reset();
+        function handleSubmit(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Thank you for your interest! We will contact you shortly.');
+            form.reset();
+        } else {
+            alert('Something went wrong. Please try again.');
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again.');
+    });
+}
 
         // Scroll animations
         const observerOptions = {
